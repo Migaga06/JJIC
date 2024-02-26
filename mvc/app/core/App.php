@@ -7,6 +7,7 @@ class App{
     public function __construct()
     {
         $url = $this->splitURL();
+        show($url);
         if(isset($url[0])){
             if(file_exists('../app/controllers/' . ucfirst($url[0]) . '.php')){
                 $this->controller = ucfirst($url[0]);
