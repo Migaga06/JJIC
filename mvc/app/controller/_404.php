@@ -1,7 +1,9 @@
 <?php
 
-class _404{
-    function index(){
-        echo "error";
+class _404 extends Controller
+{
+    public function index()
+    {
+        $this->view('404');
     }
 }
