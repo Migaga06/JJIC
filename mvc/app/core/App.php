@@ -6,25 +6,38 @@ class App{
     protected $method = 'index';
     protected $params = [];
 
+    protected $method = 'index';
+
+    protected $params = [];
+
     public function __construct()
     {
         $url = $this->splitURL();
         
         if(isset($url[0])){
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5c14c5bf4dc3b6c6e611cdeb37a61a1b813c8456
             if(file_exists('../app/controller/' . ucfirst($url[0]) . '.php')){
                 $this->controller = ucfirst($url[0]);
                 unset($url[0]);
+            }else{
+                $this->controller = '_404';
             }
         }
-        else{
-            $this->controller = '_404';
-        }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5c14c5bf4dc3b6c6e611cdeb37a61a1b813c8456
         require '../app/controller/' . $this->controller . '.php';
         $this->controller = new $this->controller;
 
         if(isset($url[1])){
-            if(method_exists(this->controller, $url[1])){
+
+            if(method_exists($this->controller, $url[1])){
+
                 $this->method = $url[1];
                 unset($url[1]);
             }
