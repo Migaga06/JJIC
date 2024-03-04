@@ -13,7 +13,7 @@ class Model extends Database{
 
     public function where ($data, $data_not = []){
         $keys = array_keys($data);
-        $keys_not = array_keys($data);
+        $keys_not = array_keys($data_not);
         $query = 'SELECT * FROM users WHERE ';
        
 
