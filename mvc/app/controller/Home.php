@@ -8,8 +8,8 @@ class Home extends Controller
 
         $model = new Model();
         $arr['user_fname'] = 'Lorraine';
-        
-        $data = $model->where($arr);
+        $arr2['user_lname'] = 'Quina';
+        $data = $model->where($arr, $arr2);
         show($data);
 
         $this->view('home');

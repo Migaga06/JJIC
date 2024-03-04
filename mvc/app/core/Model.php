@@ -22,16 +22,18 @@ class Model extends Database{
         }
 
         foreach($keys_not as $key){
-            $query .= $key . " = :" . $key . " && ";
+            $query .= $key . " != :" . $key . " && ";
         }
 
         $query = trim($query, " && ");
         show($query);
 
         $data = array_merge($data, $data_not);
-        $result = $this->query($query, $data);
+        $result = $this->query($query, $data, $data_not);
         if($result){
             return $result;
         }
+
+        return false;
     }
 }
