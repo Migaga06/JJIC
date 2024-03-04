@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>page not found
+    <h1> not found
     </h1>
 </body>
 </html>
