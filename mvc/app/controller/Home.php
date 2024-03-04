@@ -7,7 +7,9 @@ class Home extends Controller
     {
 
         $model = new Model();
-        $data = $model->findAll();
+        $arr['user_fname'] = 'Lorraine';
+        
+        $data = $model->where($arr);
         show($data);
 
         $this->view('home');
