@@ -2,7 +2,7 @@
 
 class Model extends Database
 {
-    public function __construct
+    public function __construct ()
     {
         if (!property_exists($this, 'table')) {
 
@@ -49,7 +49,7 @@ class Model extends Database
     public function insert($data)
     {
         $columns = implode(',', array_keys($data));
-        $values = implode(',', array_keys(data));
+        $values = implode(',', array_keys($data));
         $query = "insert into $this->table ($columns) values
         (v:$values)";
         show($query);
@@ -75,6 +75,17 @@ class Model extends Database
         $this->query($query, $data);
 
         return false;
+    }
+    public function delete($id, $column = 'id')
+    {
+        $data[$column] = $id;
+        $query = "delete from $this->table where $column =
+        :$column";
+
+        $this->query($query, $data);
+
+        return false;
+
     }
 
 }
