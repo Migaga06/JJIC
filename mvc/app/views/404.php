@@ -6,7 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>page not found
-    </h1>
+    <h1>Oteps Error Page</h1>
 </body>
 </html>
