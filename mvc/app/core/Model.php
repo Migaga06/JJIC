@@ -2,12 +2,12 @@
 
 class Model extends Database{
 
-    public function __construct(){
+    public function __construct()
+    {
         if(!property_exists($this, 'table')){
             $this->table = strtolower($this::class) . 's';
         }
     }
-
 
     public function findAll(){
         $query = 'SELECT * FROM users';
@@ -50,10 +50,12 @@ class Model extends Database{
         $values = implode(', :', array_keys($data));
         $query = "INSERT INTO $this->table ($columns) values (:$values)";
         show($query);
-        $this->query($query, $data);
+        //$this->query($query, $data);
+
+        //return false;
     }
 
-    public function update($id, $data, $column = "user_ID"){
+    public function update($id, $data, $column = "id"){
         $keys = array_keys($data);
         $query = "UPDATE $this->table set";
 
@@ -71,7 +73,7 @@ class Model extends Database{
         return false;
     }
 
-    public function delete($id, $column = 'user_ID'){
+    public function delete($id, $column = 'id'){
         $data[$column] = $id;
         $query = "DELETE FROM $this->table where $column = :$column";
 
