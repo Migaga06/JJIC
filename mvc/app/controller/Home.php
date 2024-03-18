@@ -7,8 +7,12 @@ class Home extends Controller
     {
 
         $user = new User();
-        $data = $user->findAll($user);
+        $data = $user->delete('1');
         show($data);
+
+        $user = new User();
+        $row = $user->findAll($user);
+        show($row);
 
         $this->view('home');
     }

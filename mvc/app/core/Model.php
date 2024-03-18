@@ -55,9 +55,9 @@ class Model extends Database{
         return false;
     }
 
-    public function update($id, $data, $column = "id"){
+    public function update($id, $data, $column = "user_ID"){
         $keys = array_keys($data);
-        $query = "UPDATE $this->table set";
+        $query = "UPDATE $this->table set ";
 
         foreach ($keys as $key){
             $query .= $key . " = :" . $key . ", ";
@@ -65,7 +65,7 @@ class Model extends Database{
 
         $query = trim($query, ", ");
 
-        $query .= "WHERE $column = :$column";
+        $query .= " WHERE $column = :$column";
         
         $data[$column] = $id;
         $this->query($query, $data);
@@ -73,7 +73,7 @@ class Model extends Database{
         return false;
     }
 
-    public function delete($id, $column = 'id'){
+    public function delete($id, $column = 'user_ID'){
         $data[$column] = $id;
         $query = "DELETE FROM $this->table where $column = :$column";
 
