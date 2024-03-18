@@ -50,9 +50,9 @@ class Model extends Database{
         $values = implode(', :', array_keys($data));
         $query = "INSERT INTO $this->table ($columns) values (:$values)";
         show($query);
-        //$this->query($query, $data);
+        $this->query($query, $data);
 
-        //return false;
+        return false;
     }
 
     public function update($id, $data, $column = "id"){
