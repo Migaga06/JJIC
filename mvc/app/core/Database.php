@@ -5,7 +5,7 @@ class Database
     public function connect()
     {
         //user - id, firstname, lastname, email, password
-        $string = "mysql:host=localhost;dbname=jjic";
+        $string = "mysql:host=localhost;dbname=bsis3c";
         $con = new PDO($string, 'root', '');
         return $con;
     }

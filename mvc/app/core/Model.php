@@ -11,7 +11,7 @@ class Model extends Database
     }
     public function findAll()
     {
-        $query = "select * from users";
+        $query = "select * from $this->table";
         $result = $this->query($query);
         if ($result) {
             return $result;
