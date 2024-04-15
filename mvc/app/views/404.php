@@ -6,7 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>yamato
-    </h1>
+    <h1>Oteps Error Page</h1>
 </body>
 </html>
