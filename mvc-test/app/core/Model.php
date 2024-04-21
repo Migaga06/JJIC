@@ -10,7 +10,7 @@ class Model extends Database{
     }
 
     public function findAll(){
-        $query = 'SELECT * FROM users';
+        $query = "SELECT * FROM $this->table";
         $result = $this->query($query);
         if($result){
             return $result;
@@ -22,7 +22,7 @@ class Model extends Database{
     public function where ($data, $data_not = []){
         $keys = array_keys($data);
         $keys_not = array_keys($data_not);
-        $query = 'SELECT * FROM users WHERE ';
+        $query = "SELECT * FROM $this->table WHERE ";
        
 
         foreach($keys as $key){
