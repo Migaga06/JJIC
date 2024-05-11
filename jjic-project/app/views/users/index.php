@@ -16,26 +16,12 @@
       </form>
     </nav>
 
-  <div class="card-group justify-content-center p-5 shadow-lg border-top border-bottom border-secondary">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 p-5 shadow-lg border-top border-bottom border-secondary">
 
     <?php if($users != null) { ?>
       <?php foreach ($users as $item) { ?>
 
-        <div class="card m-2 bg-dark rounded border border-white" style="max-width: 13rem; min-width: 13rem;">
-          <img src="<?= ROOT ?>/<?= $item->image ?>" class="card-img-top rounded-top border border-white" alt="..." style="max-width: 100%; min-width: 100%; max-height: 13rem; min-height: 13rem;">
-          <div class="card-body h-100">
-            <a href="" class="btn btn-secondary " style = "max-width: 1000px; background-color: rgba(255, 255, 255, 0.9);">
-              <h5 class="card-title text-black">
-                <i class="fa fa-id-card"></i> <?= $item->firstname ?> <?= $item->lastname ?>
-              </h5>
-            </a>
-            <p class="card-text text-white mt-1 text-center"><i class="fa fa-circle-user"></i> <?= $item->role ?></p>
-          </div>
-          <div class="card-body text-center">
-            <a href="<?= ROOT ?>/users/edit/<?= $item->user_id ?>" class="btn btn-success my-1"><i class="fa fa-edit"></i> Edit</a>
-            <a href="<?= ROOT ?>/users/delete/<?= $item->user_id ?>" class="btn btn-danger my-1"><i class="fa fa-trash"></i> Delete</a>
-          </div>
-        </div>
+        <?php include(views_path('user-tab/user')); ?>
 
       <?php } ?>
     <?php } else { ?>

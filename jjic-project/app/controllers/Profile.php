@@ -22,6 +22,7 @@ class Profile extends Controller
     $this->view('profile', [
       'crumbs'=>$crumbs,
       'row_cart'=>$row_cart,
+      'row'=>$row_cart,
       'page_tab'=>$page_tab
     ]);
   }

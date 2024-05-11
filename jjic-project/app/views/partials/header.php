@@ -34,12 +34,11 @@
               <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cart-shopping"></i> Product</a>
               <ul class="dropdown-menu" arial-labelledby="navbarDropdownMenuLink">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/products"><i class="fa fa-expand"></i> View Product</a>
+                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products"><i class="fa fa-expand"></i> View Product</a></small>
                 </li>
                 <?php if(Auth::access('Admin')):?>
-                  <hr>
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/products/select/"><i class="fa fa-screwdriver-wrench"></i> Modify Product</a>
+                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products/select/"><i class="fa fa-screwdriver-wrench"></i> Modify Product</a></small>
                 </li>
                 <?php endif; ?>
               </ul>

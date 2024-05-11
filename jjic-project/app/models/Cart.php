@@ -21,4 +21,26 @@ class Cart extends Model
         $data['cart_id'] = random_string(60);
         return $data;
     }
+
+    public function merge_exist($data){
+        echo "<pre>"; print_r($data); 
+        $cart = new Cart();
+
+        $conditions = [
+            'product_id' => $data['product_id'],
+            'user_id' => $data['user_id']
+        ];
+
+        $checker = $cart->whereMultiple($conditions);
+
+        if($checker){
+            $data['product_qty'] = $checker[0]->product_qty + $data['product_qty'];
+            $data['cart_id'] = $checker[0]->cart_id;
+            echo "<pre>"; print_r($checker[0]);
+            echo "<pre>"; print_r($data);
+            $cart->updateWhereDouble($data['product_id'], $data['user_id'], $data);
+        }else if(!$checker){
+            $cart->insert($_POST);
+        }
+    }
 }

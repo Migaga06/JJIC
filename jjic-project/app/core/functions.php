@@ -45,3 +45,13 @@ function random_string($length)
 
   return $text;
 }
+
+function views_path($view){
+  if (file_exists('../app/views/' . $view . '.tab.php')) {
+
+    return '../app/views/' . $view . '.tab.php';
+  } else {
+
+    return '../app/views/404.php';
+  }
+}
