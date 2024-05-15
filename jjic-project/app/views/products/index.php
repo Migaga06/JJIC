@@ -13,7 +13,7 @@
       </form>
     </nav>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center p-3 shadow-lg mx-1 border-top border-bottom border-secondary">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center mt-2 p-3 shadow-lg mx-1 border-top border-bottom border-secondary">
     
 
     <?php if($gets != null) { ?>

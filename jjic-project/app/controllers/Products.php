@@ -12,7 +12,7 @@ class Products extends Controller
     $crumbs[] = ['Products', "products/index"];
 
     $product = new Product();
-    $row = $product->findAll();
+    $row = $product->findAllEqual();
 
 
     $this->view('products/index', [

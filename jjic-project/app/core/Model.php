@@ -34,6 +34,28 @@ class Model extends Database
     return false;
   }
 
+  public function findAllEqual()
+  {
+    $query = "select * from $this->table WHERE product_qty != 0";
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
   public function where($column, $value)
   {
     $column = addslashes($column);
@@ -109,29 +131,29 @@ class Model extends Database
   {
       $keys = array_keys($data);
       $keys_not = array_keys($data_not);
-  
+
       $query = "SELECT * FROM $this->table WHERE ";
-  
+
       foreach ($keys as $key) {
           $query .= "$key LIKE :$key OR ";
       }
-  
+
       foreach ($keys_not as $key) {
           $query .= "$key NOT LIKE :$key AND ";
       }
-  
+
       $query = rtrim($query, " OR ");
       $query = rtrim($query, " AND ");
-  
+
       $data = array_merge($data, $data_not);
-  
+
       // Add '%' around the values to search for partial matches
       foreach ($data as &$value) {
           $value = '%' . $value . '%';
       }
-  
+
       $result = $this->query($query, $data);
-  
+
       if ($result) {
           return $result[0];
       }
@@ -179,7 +201,7 @@ class Model extends Database
 
     $data[$column] = $id;
     $this->query($query, $data);
-    
+
     return false;
   }
 
@@ -205,7 +227,7 @@ class Model extends Database
   public function updateExi($column, $value, $whereVal){
     $column = addslashes($column);
     $query = "update $this->table set $column = :value where product_name LIKE :whereVal";
-    echo $query;
+
     return $this->query($query, [
       'value'=>$value,
       'whereVal'=> '%' . $whereVal . '%'
@@ -215,10 +237,32 @@ class Model extends Database
   public function updateQty($column, $value, $whereVal){
     $column = addslashes($column);
     $query = "update $this->table set $column = :value where product_id = :whereVal";
-    echo $query;
+
     return $this->query($query, [
       'value'=>$value,
       'whereVal'=>$whereVal
+    ]);
+  }
+
+  public function insertResFromCarts($data, $qty, $price) {
+    $column = addslashes("cart_id");
+    $query = "INSERT INTO $this->table (user_id, product_name, product_price, product_description, product_qty, product_type, image, product_id, reserve_id, reserve_date, reserve_status, confirm_due)
+              SELECT user_id, product_name, :price, product_description, :qty, product_type, image, product_id, :reserve_id, :reserve_date, :reserve_status, :confirm_due
+              FROM carts WHERE $column = :id";
+
+    $reserve_id = random_string(60);
+    $reserve_date = date("Y-m-d H:i:s");
+    $confirm_due = date("Y-m-d H:i:s");
+    $reserve_status = "Not Confirm";
+
+    $this->query($query, [
+      'reserve_id' => $reserve_id,
+      'reserve_date' => $reserve_date,
+      'reserve_status' => $reserve_status,
+      'confirm_due' => $confirm_due,
+      'qty'=>$qty,
+      'id'=>$data,
+      'price'=>$price
     ]);
   }
 
@@ -241,5 +285,130 @@ class Model extends Database
       $this->query($query, $data);
 
       return false;
+  }
+
+  public function deleteCart($ids){
+    $query = "DELETE FROM $this->table WHERE cart_id = :ids";
+
+    $this->query($query, [
+      'ids'=>$ids
+    ]);
+  }
+
+  public function viewReserve(){
+    $query= "SELECT u.firstname, u.lastname, u.email, u.user_image, r.*
+             FROM $this->table r JOIN users u
+             ON r.user_id = u.user_id AND r.reserve_status = 'Not Confirm'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function viewConfirmReserve(){
+    $query= "SELECT u.firstname, u.lastname, u.email, u.user_image, r.*
+             FROM $this->table r JOIN users u
+             ON r.user_id = u.user_id AND r.reserve_status = 'Confirm'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function mergeReserve($res_ids){
+    $placeholders = "'" . implode("','", array_map('addslashes', $res_ids)) . "'";
+    $query = "SELECT
+                  user_id,
+                  product_id,
+                  product_name,
+                  product_description,
+                  product_type,
+                  image,
+                  reserve_date,
+                  reserve_status,
+                  SUM(product_qty) AS total_qty,
+                  SUM(product_price) AS total_price,
+                  GROUP_CONCAT(reserve_id ORDER BY reserve_id) AS merged_reserve_ids
+              FROM
+                  $this->table
+              WHERE
+                  reserve_id IN ($placeholders)
+              GROUP BY
+                  user_id, product_id";
+
+    $result = $this->query($query);
+
+
+    if (!empty($result) && count($result) == 1) {
+      //showD($result);
+      $user_id = $result[0]->user_id;
+      $product_id = $result[0]->product_id;
+      $product_name = $result[0]->product_name;
+      $product_description = $result[0]->product_description;
+      $product_type = $result[0]->product_type;
+      $image = $result[0]->image;
+      $reserve_date = $result[0]->reserve_date;
+      $reserve_status = $result[0]->reserve_status;
+      $total_qty = $result[0]->total_qty;
+      $total_price = $result[0]->total_price;
+      $merged_reserve_ids = random_string(60);
+
+      $query1 = "INSERT INTO $this->table
+                    (user_id, product_id, product_name, product_description, product_type, image, reserve_date, reserve_status, product_qty, product_price, reserve_id)
+                   VALUES
+                    (:user_id, :product_id, :product_name, :product_description, :product_type, :image, :reserve_date, :reserve_status, :total_qty, :total_price, :new_id)";
+
+      $this->query($query1, [
+        'user_id' => $user_id,
+        'product_id' => $product_id,
+        'product_name' => $product_name,
+        'product_description' => $product_description,
+        'product_type' => $product_type,
+        'image' => $image,
+        'reserve_date' => $reserve_date,
+        'reserve_status' => $reserve_status,
+        'total_qty' => $total_qty,
+        'total_price' => $total_price,
+        'new_id' => $merged_reserve_ids
+      ]);
+
+      $query2 = "DELETE FROM $this->table WHERE reserve_id IN ($placeholders)";
+      $this->query($query2);
+
+      include(views_path("partials/pop-message-success-merge"));
+      header("refresh:0.25;url=reservation");
+    }
+    else{
+      include(views_path("partials/pop-message-fail-merge"));
+      header("refresh:1;url=reservation");
+    }
   }
 }

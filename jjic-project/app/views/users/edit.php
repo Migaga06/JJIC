@@ -14,7 +14,7 @@
         <form action="" method="POST" enctype="multipart/form-data">
         <div class="row mx-2 p-3 shadow-lg rounded-4 border-top border-bottom border-secondary">
             <div class="col-sm-4 col-md-3">
-                <img src="<?=ROOT?>/<?= $row[0]->image ?>" alt="" class="d-block border border-warning mx-auto rounded-4 mt-5" style="width: 150px; height: 150px;">
+                <img src="<?=ROOT?>/<?= $row[0]->user_image ?>" alt="" class="d-block border border-warning mx-auto rounded-4 mt-5" style="width: 150px; height: 150px;">
                 <div class="text-center">
                     <label for="image_browser"  class="btn-sm btn bg-black bg-gradient text-white mt-2">
                         <input onchange="display_image_name(this.files[0].name)" id="image_browser" type="file" name="image" style="display: none;">

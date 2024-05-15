@@ -46,6 +46,20 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/appointment"><i class="fa fa-calendar-check"></i> Appointment</a>
             </li>
+            <?php if(Auth::access('Admin')):?>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-rectangle-list"></i> Lists</a>
+              <ul class="dropdown-menu" arial-labelledby="navbarDropdownMenuLink">
+                <li class="nav-item">
+                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products"><i class="fa fa-calendar-check"></i> List Appointment</a></small>
+                </li>
+                <li class="nav-item">
+                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/reservation"><i class="fa fa-box-open"></i> List Reservation</a></small>
+                </li>
+
+              </ul>
+            </li>
+            <?php endif; ?>
 
           <?php endif;?>
         </ul>
@@ -57,7 +71,7 @@
         <?php else: ?>
 
             <a class="nav-link me-2 p-2 rounded-5 border border-white active text-white" style="background-color: rgb(45, 45, 45);" href="<?= ROOT ?>/profile">
-              <img class="rounded-circle border border-warning" height="30px" width="30px" src="<?= ROOT ?>/<?= $_SESSION['USER']->image ?>"
+              <img class="rounded-circle border border-warning" height="30px" width="30px" src="<?= ROOT ?>/<?= $_SESSION['USER']->user_image ?>"
                 alt="">
               <?= $_SESSION['USER']->firstname ?>
               <?= $_SESSION['USER']->lastname ?>

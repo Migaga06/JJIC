@@ -2,12 +2,13 @@
 
     <div class="container-fluid  p-4 shadow-5 mx-auto" style = "max-width: 1000px; background-color: rgb(45, 45, 45);">
         <?php include "partials/crumbs.php" ?>
+
         <h1 class="text-white"><i class="fa">Profile Account</i></h1>
 
         <?php if (!empty($_SESSION['USER'])): ?>
         <div class="row mx-2 p-3 shadow-lg rounded-4 border-top border-bottom border-secondary">
             <div class="col-sm-4 col-md-3">
-                <img src="<?= ROOT ?>/<?= $_SESSION['USER']->image ?>" alt="" class="d-block border border-warning mx-auto rounded-circle" style="width: 150px; height: 150px;">
+                <img src="<?= ROOT ?>/<?= $_SESSION['USER']->user_image ?>" alt="" class="d-block border border-warning mx-auto rounded-circle" style="width: 150px; height: 150px;">
                 <h3 class = "text-center text-white"><?= $_SESSION['USER']->firstname ?> <?= $_SESSION['USER']->lastname ?></h3>
             </div>
             <div class="col-sm-8 col-md-9 p-2 mt-1 table-responsive">
@@ -56,15 +57,7 @@
                     case 'appointments':
                             include(views_path('profile-tab/appointment-tab'));
                         break;
-                    case 'cart-reserve':
-                            include(views_path('profile-tab/cart-tab'));
-                            include(views_path('profile-tab/reserve-cart'));
-                        break;
-                    case 'cart-remove':
-                            include(views_path('profile-tab/cart-tab'));
-                            include(views_path('profile-tab/remove-cart'));
-                        break;
-                    
+
                     default:
                         # code...
                         break;

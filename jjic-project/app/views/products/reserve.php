@@ -8,7 +8,7 @@
     <h4 class="text-warning text-center mb-5"><i class="fa"><i class="fa fa-circle-question"></i> Are you sure you want to reserve this item?</i></h4>
 
     <?php if($row){ ?>
-      
+
     <?php if($showQuantityExceededMessage): ?>
                 <div class="modal" tabindex="-1" role="dialog" style="display: block;">
                     <div class="modal-dialog" role="document">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
     <?php endif; ?>
-        
+
     <div class="row mx-2 p-3 shadow-lg rounded-4 border-top border-bottom border-secondary" style="background-color: rgba(64, 64, 64, 0.5);">
       <div class="col-sm-12 col-md-5 col-lg-4">
         <img src="<?=ROOT?>/<?= $row[0]->image ?>" alt="" class="d-block border border-warning mx-auto rounded-4" style="width: 100%; height: 100%;">
@@ -85,6 +85,8 @@
                   <input type="hidden" name="product_qty" id="hiddenText" value="1">
                   <input type="hidden" name="reserve_id">
                   <input type="hidden" name="reserve_date">
+                  <input type="hidden" name="confirm_due">
+                  <input type="hidden" name="reserve_status" value="Not Confirm">
                   <input type="hidden" name="user_id" value="<?= $_SESSION['USER']->user_id ?>">
                   <input type="hidden" name="product_name" value="<?= $row[0]->product_name ?>">
                   <input type="hidden" name="product_description" value="<?= $row[0]->product_description ?>">
@@ -115,7 +117,7 @@
       </div>
     </div>
     <?php }else{ ?>
-    
+
     <?php } ?>
 
   </div>
