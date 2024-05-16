@@ -18,7 +18,7 @@
                 <img src="<?=ROOT?>/<?= $row[0]->user_image ?>" alt="" class="d-block border border-warning mx-auto rounded-4 mt-5" style="width: 150px; height: 150px;">
                 <div class="text-center">
                     <label for="image_browser"  class="btn-sm btn bg-black bg-gradient text-white mt-2">
-                        <input disabled autofocus onchange="display_image_name(this.files[0].name)" id="image_browser" type="file" name="image" style="display: none;">
+                        <input disabled autofocus onchange="display_image_name(this.files[0].name)" id="image_browser" type="file" name="user_image" style="display: none;">
                         <i class="fa fa-upload"></i> Browse image
                     </label>
                     <p class = "file_info text-muted bg-white rounded mt-1"></p>
@@ -34,6 +34,7 @@
                                 <option value="">Choose a Role</option>
                                 <option <?= $row[0]->role == 'Super Admin' ? 'selected' : '' ?> value="Super Admin">Super Admin</option>
                                 <option <?= $row[0]->role == 'Admin' ? 'selected' : '' ?> value="Admin">Admin</option>
+                                <option <?= $row[0]->role == 'Staff' ? 'selected' : '' ?> value="Staff">Staff</option>
                                 <option <?= $row[0]->role == 'User' ? 'selected' : '' ?> value="User">User</option>
                             </select>
                         </td>

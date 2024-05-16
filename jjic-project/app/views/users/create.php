@@ -26,18 +26,21 @@
                 <?php endif; ?>
 
                 <input type="hidden" name="user_id">
+                <input type="hidden" name="violation_count" value="0">
+                <input type="hidden" name="user_status" value="Not Banned">
 
                 <div class="mb-2">
                     <label for="" class="text-white">Image</label>
-                    <input type="file" name="image" class="form-control">
+                    <input type="file" name="user_image" class="form-control">
                 </div>
 
                 <div class="mb-2">
                     <label for="" class="text-white">Role</label>
                     <select name="role" class="form-control">
                         <option <?= get_select('role', '') ?> value="">Choose a Role</option>
-                        <option <?= get_select('role', 'Admin') ?> value="Admin">Admin</option>
                         <option <?= get_select('role', 'Super Admin') ?> value="Super Admin">Super Admin</option>
+                        <option <?= get_select('role', 'Admin') ?> value="Admin">Admin</option>
+                        <option <?= get_select('role', 'Staff') ?> value="Staff">Staff</option>
                         <option <?= get_select('role', 'User') ?> value="User">User</option>
                     </select>
                 </div>

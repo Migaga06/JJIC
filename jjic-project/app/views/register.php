@@ -28,10 +28,12 @@
 
                 <div class="mb-2">
                     <label for="" class="text-white">Image</label>
-                    <input type="file" name="image" class="form-control">
+                    <input type="file" name="user_image" class="form-control">
                 </div>
 
                 <input type="hidden" name ="role" value = "User">
+                <input type="hidden" name ="user_status" value = "Not Banned">
+                <input type="hidden" name ="violation_count" value = "0">
 
                 <div class="mb-2">
                     <label for="" class="text-white">First Name</label>

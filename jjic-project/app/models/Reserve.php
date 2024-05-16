@@ -27,12 +27,12 @@ class Reserve extends Model
     }
 
     public function make_reserve_date($data){
-        $data['reserve_date'] = date("Y-m-d H:i:S");
+        $data['reserve_date'] = date("Y-m-d H:i:s");
         return $data;
     }
 
     public function make_confirm_date($data){
-        $data['confirm_due'] = date("Y-m-d H:i:S");
+        $data['confirm_due'] = date("Y-m-d H:i:s");
         return $data;
     }
 

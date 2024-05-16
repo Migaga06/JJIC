@@ -327,7 +327,36 @@ class Model extends Database
     $result = $this->query($query);
 
     if ($result) {
+
       $data = $result;
+
+      // Get the current date and time
+      $now = new DateTime();
+
+      // Loop through each result to check the confirm_due date
+      foreach ($data as &$reservation) {
+          // Assuming confirm_due is a datetime string, convert it to DateTime object
+          $confirm_due = new DateTime($reservation->confirm_due);
+
+          if ($confirm_due < $now) {
+              // Perform the action for overdue reservations
+              $reservation->reserve_status = 'Overdue';
+
+              // Optionally increment the violation count in the result array (if needed)
+              $user_id = $reservation->user_id;
+
+              // Update the reserve_status and increment violation_count in the database
+              $updateQuery = "UPDATE $this->table r
+                              JOIN users u ON r.user_id = u.user_id
+                              SET
+                                  r.reserve_status = 'Overdue',
+                                  u.violation_count = u.violation_count + 1
+                              WHERE
+                                  r.reserve_id = :reserve_id";
+
+              $this->query($updateQuery, ['reserve_id' => $reservation->reserve_id]);
+          }
+      }
 
       if(is_array($data)){
         if (property_exists($this, 'afterSelect')) {
@@ -341,6 +370,32 @@ class Model extends Database
       return $data;
     }
     return false;
+  }
+
+  public function cancelReserve($res_ids){
+    $query = "SELECT * FROM $this->table WHERE reserve_id = '$res_ids'";
+
+    $result = $this->query($query);
+    $getQty = $result[0]->product_qty;
+    $prodID = $result[0]->product_id;
+
+
+    $query = "SELECT * FROM products WHERE product_id = :prod_id";
+    $res = $this->query($query, [
+      'prod_id'=>$prodID
+    ]);
+
+    $getQty = $getQty + $res[0]->product_qty;
+    //showD($getQty);
+
+    $query = "UPDATE products SET product_qty = :qty WHERE product_id = :product_id";
+    $this->query($query, [
+      'qty'=>$getQty,
+      'product_id'=>$prodID
+    ]);
+
+    $query = "DELETE FROM $this->table WHERE reserve_id = '$res_ids'";
+    $this->query($query);
   }
 
   public function mergeReserve($res_ids){
@@ -410,5 +465,137 @@ class Model extends Database
       include(views_path("partials/pop-message-fail-merge"));
       header("refresh:1;url=reservation");
     }
+  }
+
+  public function confirmRes($res_ids, $date){
+    $query = "UPDATE $this->table SET confirm_due = '$date', reserve_status = 'Confirm' WHERE reserve_id = '$res_ids'";
+
+    $this->query($query);
+  }
+
+  public function confirmRemoveRes($res_ids){
+    $placeholders = "'" . implode("','", array_map('addslashes', $res_ids)) . "'";
+    $query = "UPDATE $this->table SET reserve_status = 'Not Confirm' WHERE reserve_id IN ($placeholders)";
+
+    $this->query($query);
+  }
+
+  public function doneRes($res_ids){
+    $placeholders = "'" . implode("','", array_map('addslashes', $res_ids)) . "'";
+    $query = "UPDATE $this->table SET reserve_status = 'Done' WHERE reserve_id IN ($placeholders)";
+
+    $this->query($query);
+  }
+
+  public function viewOverdueReserve(){
+    $query= "SELECT u.firstname, u.lastname, u.violation_count, u.email, u.user_image, r.*
+             FROM $this->table r JOIN users u
+             ON r.user_id = u.user_id AND r.reserve_status = 'Overdue' AND u.user_status = 'Not Banned'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function viewDoneReserve(){
+    $query= "SELECT u.firstname, u.lastname, u.email, u.user_image, r.*
+             FROM $this->table r JOIN users u
+             ON r.user_id = u.user_id AND r.reserve_status = 'Done'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function bannedUser($banId, $banTime){
+    $query = "UPDATE $this->table SET banned_time = '$banTime', user_status = 'Banned' WHERE user_id = '$banId'";
+
+    $this->query($query);
+  }
+
+  public function getBannedTime($userId)
+  {
+    // Assuming you're using a database connection represented by $db
+    // Replace 'users' with your actual table name where user information is stored
+    $query = "SELECT banned_time, user_status FROM $this->table WHERE id = :userId";
+    $result = $this->query($query, [
+      'userId' => $userId
+    ]);
+
+    // Check if the result is not empty before fetching the banned_time
+    if ($result && count($result) > 0) {
+        // Extract the banned_time from the first row of the result
+        $bannedTime = $result[0]->banned_time;
+        $userStatus = $result[0]->user_status;
+
+        // Check if the banned_time is in the past
+        if (strtotime($bannedTime) < time() && $userStatus === 'Banned') {
+          // Update the user_status to 'Not Banned' and set banned_time to null
+          $updateQuery = "UPDATE $this->table SET user_status = 'Not Banned', banned_time = NULL WHERE id = :userId";
+          $this->query($updateQuery, ['userId' => $userId]);
+
+          // Update the in-memory status
+          $result[0]->user_status = 'Not Banned';
+          $result[0]->banned_time = null;
+        }
+
+        return $bannedTime;
+    } else {
+        return null; // Return null if the query fails or no rows are returned
+    }
+  }
+
+  public function removeOverdueReserve($res_ids){
+    $query = "SELECT * FROM $this->table WHERE reserve_id = '$res_ids'";
+
+    $result = $this->query($query);
+    $getQty = $result[0]->product_qty;
+    $prodID = $result[0]->product_id;
+
+
+    $query = "SELECT * FROM products WHERE product_id = :prod_id";
+    $res = $this->query($query, [
+      'prod_id'=>$prodID
+    ]);
+
+    $getQty = $getQty + $res[0]->product_qty;
+    //showD($getQty);
+
+    $query = "UPDATE products SET product_qty = :qty WHERE product_id = :product_id";
+    $this->query($query, [
+      'qty'=>$getQty,
+      'product_id'=>$prodID
+    ]);
+
+    $query = "DELETE FROM $this->table WHERE reserve_id = '$res_ids'";
+    $this->query($query);
   }
 }

@@ -23,7 +23,6 @@ class Cart extends Model
     }
 
     public function merge_exist($data){
-        echo "<pre>"; print_r($data); 
         $cart = new Cart();
 
         $conditions = [

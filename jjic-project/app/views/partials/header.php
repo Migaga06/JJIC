@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="<?= ROOT ?>/assets/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="<?= ROOT ?>/assets/fontawesome/all.min.css">
   <link rel="stylesheet" href="<?= ROOT ?>/assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <header>
 <nav class="navbar navbar-expand-xl sticky-top"  style = "background-color: rgba(255, 255, 255, 0.9);">

@@ -1,7 +1,7 @@
 <tr>
         <td>
             <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" name="reserve_id[]" value="<?= $item->cart_id ?>" id="flexCheckDefault">
+                <input class="form-check-input" type="checkbox" name="reserve_id[]" value="<?= $item->reserve_id ?>" id="flexCheckDefault">
             </div>
         </td>
         <td ><?= $item->firstname?> <?= $item->lastname?></td>
@@ -9,6 +9,7 @@
         <td><?= $item->product_type ?></td>
         <td><i class="fa fa-peso-sign"></i> <?= $item->product_price ?></td>
         <td><?= $item->product_qty ?></td>
+        <td><?= $item->confirm_due ?></td>
         <td>
             <img class="rounded"width="80px" height="80px" src="<?= ROOT ?>/<?= $item->image ?>" alt="">
         </td>

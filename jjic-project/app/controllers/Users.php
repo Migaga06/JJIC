@@ -11,7 +11,7 @@ class Users extends Controller
     $x = new User();
     $rows = $x->findAll();
 
-    
+
 
     if(Auth::access('Super Admin')){
 
@@ -48,16 +48,16 @@ class Users extends Controller
           $allowed[] = 'image/png';
           $allowed[] = 'image/jpeg';
 
-          if ($_FILES['image']['error'] == 0 && in_array($_FILES['image']['type'], $allowed)) {
+          if ($_FILES['user_image']['error'] == 0 && in_array($_FILES['user_image']['type'], $allowed)) {
 
             $folder = 'assets/images/';
             if (!file_exists($folder)) {
               mkdir($folder, 0777, true);
             }
-            $destination = $folder . $_FILES['image']['name'];
-            move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+            $destination = $folder . $_FILES['user_image']['name'];
+            move_uploaded_file($_FILES['user_image']['tmp_name'], $destination);
 
-            $_POST['image'] = $destination;
+            $_POST['user_image'] = $destination;
             }
           }
 
@@ -101,25 +101,25 @@ class Users extends Controller
           $allowed[] = 'image/png';
           $allowed[] = 'image/jpeg';
 
-          if ($_FILES['image']['error'] == 0 && in_array($_FILES['image']['type'], $allowed)) {
+          if ($_FILES['user_image']['error'] == 0 && in_array($_FILES['user_image']['type'], $allowed)) {
 
             $folder = 'assets/images/';
             if (!file_exists($folder)) {
               mkdir($folder, 0777, true);
             }
-            $destination = $folder . $_FILES['image']['name'];
-            move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+            $destination = $folder . $_FILES['user_image']['name'];
+            move_uploaded_file($_FILES['user_image']['tmp_name'], $destination);
 
-            $_POST['image'] = $destination;
+            $_POST['user_image'] = $destination;
             }
           }
-        echo "<pre>"; print_r($_FILES); 
+        echo "<pre>"; print_r($_FILES);
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-        
-        
+
+
         $x->update($id, $_POST, 'user_id');
-        
+
         redirect('users');
       }
     }
@@ -144,7 +144,7 @@ class Users extends Controller
       redirect('login');
     }
 
-    
+
     $x = new User();
     $row = $x->where('user_id', $id);
 
@@ -156,7 +156,7 @@ class Users extends Controller
         redirect('users');
       }
     }
-    
+
     if(Auth::access('Super Admin')){
       $this->view('users/delete', [
         'row' => $row
@@ -164,6 +164,6 @@ class Users extends Controller
     }else{
       $this->view('access-denied');
     }
-    
+
   }
 }

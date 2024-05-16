@@ -15,7 +15,7 @@ class Profile extends Controller
     $appointment = new Appointment();
     $reserve = new Reserve();
     $product = new Product();
-    
+
     $row_cart = $cart->where('user_id', $_SESSION['USER']->user_id);
     $row_reserve = $reserve->where('user_id', $_SESSION['USER']->user_id);
 
@@ -30,19 +30,19 @@ class Profile extends Controller
           'product_name'=>$product_name,
           'user_id'=>$_SESSION['USER']->user_id
         ]);
-      } else 
+      } else
       if(isset($_POST['btnRemove'])){
 
         $cart->delete($_POST['btnRemove'], 'cart_id');
         redirect('profile/'.$_SESSION['USER']->user_id."?tab=carts");
 
-      } else 
+      } else
       if(isset($_POST['multiRes'])){
         if (isset($_POST['cart_id']) && !empty($_POST['cart_id'])) {
           $all_id = $_POST['cart_id'];
           $all_qty = $_POST['product_qty'];
-          
-  
+
+
           foreach ($all_id as $key => $ids) {
             $qtys = $all_qty[$key];
             $get = $cart->where('cart_id', $ids);
@@ -75,14 +75,14 @@ class Profile extends Controller
           'user_id'=>$_SESSION['USER']->user_id
         ]);
 
-      } else 
+      } else
       if(isset($_POST['cancelRes'])){
 
         $reserve->cancelRes($_POST['cancelRes']);
 
       }
     }
-    
+
     $this->view('profile', [
       'crumbs'=>$crumbs,
       'row_cart'=>$row_cart,
@@ -91,5 +91,5 @@ class Profile extends Controller
     ]);
   }
 
-    
+
 }
