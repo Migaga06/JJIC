@@ -4,13 +4,13 @@ class Controller
 {
     public function view($name)
     {
-        if(file_exists('../app/views/' . $name . '.php'))
+        if(file_exists('../app/views/' . $name .'.php'))
         {
-            require '../app/views/' . $name . '.php';
+           require '../app/views/' . $name . '.php';
         }
         else
         {
-        require '../app/views/404.php';
+            require '../app/views/404.php';
         }
     }
 }
