@@ -7,10 +7,6 @@ class Profile extends Controller
     if (!Auth::logged_in()) {
       redirect('login');
     }
-
-    $crumbs[] = ['Home', "home"];
-    $crumbs[] = ['Profile', "profile"];
-
     $cart = new Cart();
     $appointment = new Appointment();
     $reserve = new Reserve();
@@ -80,11 +76,15 @@ class Profile extends Controller
 
         $reserve->cancelRes($_POST['cancelRes']);
 
+      } else
+      if(isset($_POST['clearReserve'])){
+
+        $reserve->clearReserveId($_POST['clearReserve']);
+        header("refresh:0.25;url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
       }
     }
 
     $this->view('profile', [
-      'crumbs'=>$crumbs,
       'row_cart'=>$row_cart,
       'row_reserve'=>$row_reserve,
       'page_tab'=>$page_tab

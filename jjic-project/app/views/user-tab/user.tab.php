@@ -9,9 +9,15 @@
             </a>
             <p class="card-text text-white mt-1 text-center"><i class="fa fa-circle-user"></i> <?= $item->role ?></p>
           </div>
-          <div class="card-body text-center">
-            <a href="<?= ROOT ?>/users/edit/<?= $item->user_id ?>" class="btn btn-success my-1"><i class="fa fa-edit"></i> Edit</a>
-            <a href="<?= ROOT ?>/users/delete/<?= $item->user_id ?>" class="btn btn-danger my-1"><i class="fa fa-trash"></i> Delete</a>
+            <div class="card-body text-center">
+              <a href="<?= ROOT ?>/users/edit/<?= $item->user_id ?>" class="btn btn-success my-1"><i class="fa fa-edit"></i> Edit</a>
+              <a href="<?= ROOT ?>/users/delete/<?= $item->user_id ?>" class="btn btn-danger my-1"><i class="fa fa-trash"></i> Delete</a>
+
+          <?php if($item->user_status == 'Banned'){?>
+              <form action="" method="POST">
+                <button type="submit" name="unbannedUser" type="button" class="btn bg-primary bg-gradient text-white shadow" value="<?= $item->user_id ?>"><i class="fa fa-unlock"></i> Unbanned</button>
+              </form>
+          <?php }?>
           </div>
     </div>
 </div>

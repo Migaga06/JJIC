@@ -9,17 +9,20 @@ class Users extends Controller
     }
 
     $x = new User();
-    $rows = $x->findAll();
+    $rows = $x->viewNotBannedUser();
+    $banned_users = $x->viewBannedUser();
 
 
 
     if(Auth::access('Super Admin')){
 
-      $crumbs[] = ['Home', "./"];
-      $crumbs[] = ['Users', "users/"];
+      if(isset($_POST['unbannedUser'])){
+        $x->unbannedUser($_POST['unbannedUser']);
+        redirect('users');
+      }
 
       $this->view('users/index', [
-        'crumbs'=>$crumbs,
+        'banned_users'=>$banned_users,
         'users'=>$rows
       ]);
     }else{
@@ -35,10 +38,6 @@ class Users extends Controller
 
     $errors = [];
     $user = new User();
-
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Users', "users"];
-    $crumbs[] = ['Create', "users/create"];
 
     if(Auth::access('Super Admin')){
       if (count($_POST) > 0) {
@@ -76,7 +75,6 @@ class Users extends Controller
 
     if(Auth::access('Super Admin')){
       $this->view('users/create', [
-        'crumbs'=>$crumbs,
         'errors' => $errors
       ]);
     }else{
@@ -124,14 +122,10 @@ class Users extends Controller
       }
     }
 
-    $crumbs[] = ['Home', "../"];
-    $crumbs[] = ['Users', "users/"];
-    $crumbs[] = ['Edit', "users/edit"];
 
     if(Auth::access('Super Admin')){
       $this->view('users/edit', [
-        'row'=> $row,
-        'crumbs'=>$crumbs
+        'row'=> $row
       ]);
     }else{
       $this->view('access-denied');

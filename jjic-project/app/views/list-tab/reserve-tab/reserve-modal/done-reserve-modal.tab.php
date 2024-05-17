@@ -91,3 +91,24 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="clear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="clear" aria-hidden="true"  data-bs-theme="dark">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title fs-5 text-light text-center" id="clear"><i class="fa">Reserve Item</i></h2>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body bg-danger bg-gradient">
+                                        <h4 class="text-white text-center"><i class="fa fa-eye"> Are you sure you want to clear?</i></h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="" method="POST">
+                                                <button type="button" class="btn bg-dark bg-gradient text-white shadow" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" name="clearData" type="button" class="btn bg-danger bg-gradient text-white shadow">Proceed Clear Data</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>

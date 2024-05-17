@@ -45,7 +45,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/appointment"><i class="fa fa-calendar-check"></i> Appointment</a>
+              <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/appointments"><i class="fa fa-calendar-check"></i> Appointment</a>
             </li>
             <?php if(Auth::access('Admin')):?>
             <li class="nav-item dropdown">

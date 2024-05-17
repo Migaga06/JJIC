@@ -598,4 +598,64 @@ class Model extends Database
     $query = "DELETE FROM $this->table WHERE reserve_id = '$res_ids'";
     $this->query($query);
   }
+
+  public function deleteDoneRes(){
+    $query = "DELETE FROM $this->table WHERE reserve_status = 'Done'";
+    $this->query($query);
+    return false;
+  }
+
+  public function viewBannedUser(){
+    $query = "SELECT * FROM $this->table WHERE user_status = 'Banned'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function viewNotBannedUser(){
+    $query = "SELECT * FROM $this->table WHERE user_status = 'Not Banned'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function unbannedUser($id){
+    $updateQuery = "UPDATE $this->table SET user_status = 'Not Banned', banned_time = NULL WHERE user_id = :userId";
+    $this->query($updateQuery, ['userId' => $id]);
+  }
+
+  public function clearReserveId($id){
+    $delQuery = "DELETE FROM $this->table WHERE reserve_id = '$id'";
+    $this->query($delQuery);
+  }
 }

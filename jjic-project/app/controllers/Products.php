@@ -7,16 +7,11 @@ class Products extends Controller
     if (!Auth::logged_in()) {
       redirect('login');
     }
-
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Products', "products/index"];
-
     $product = new Product();
     $row = $product->findAllEqual();
 
 
     $this->view('products/index', [
-      'crumbs'=>$crumbs,
       'gets'=>$row
     ]);
   }
@@ -25,15 +20,10 @@ class Products extends Controller
     if (!Auth::logged_in()) {
       redirect('login');
     }
-
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Products', "products/index"];
-    $crumbs[] = ['Add to Cart', "products/add"];
-
     $product = new Product();
     $row = $product->where('product_id', $id);
     $cart = new Cart();
-    
+
     $showQuantityExceededMessage = false;
 
     if (count($_POST) > 0) {
@@ -48,7 +38,6 @@ class Products extends Controller
     }
 
     $this->view('products/add', [
-      'crumbs'=>$crumbs,
       'row'=>$row,
       'showQuantityExceededMessage' => $showQuantityExceededMessage
     ]);
@@ -58,10 +47,6 @@ class Products extends Controller
     if(!Auth::logged_in()){
       redirect('login');
     }
-
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Products', "products/index"];
-    $crumbs[] = ['Reserve Item', "products/reserve"];
 
     $product = new Product();
     $row = $product->where('product_id', $id);
@@ -79,9 +64,8 @@ class Products extends Controller
         $showQuantityExceededMessage = true;
       }
     }
-    
+
     $this->view('products/reserve', [
-      'crumbs'=>$crumbs,
       'row'=>$row,
       'showQuantityExceededMessage' => $showQuantityExceededMessage
     ]);
@@ -92,15 +76,11 @@ class Products extends Controller
       redirect('login');
     }
 
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Modify Products', "products/select"];
-
     $product = new Product();
     $row = $product->findAll();
 
     if(Auth::access('Admin')){
       $this->view('products/select', [
-        'crumbs'=>$crumbs,
         'gets'=>$row
       ]);
     }else{
@@ -115,11 +95,6 @@ class Products extends Controller
 
     $errors = [];
     $product = new Product();
-
-
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Modify Products', "products/select"];
-    $crumbs[] = ['Create Products', "products/create"];
 
     if(Auth::access('Admin')){
       if (count($_POST) > 0) {
@@ -164,7 +139,6 @@ class Products extends Controller
 
     if(Auth::access('Admin')){
       $this->view('products/create', [
-        'crumbs'=>$crumbs,
         'errors' => $errors
       ]);
     }else{
@@ -181,11 +155,6 @@ class Products extends Controller
     $product = new Product();
 
     $row = $product->where('product_id', $id);
-
-    
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Modify Products', "products/select"];
-    $crumbs[] = ['Edit Products', "products/edit"];
 
     if(Auth::access('Admin')){
       if (count($_POST) > 0) {
@@ -209,7 +178,7 @@ class Products extends Controller
             }
           }
 
-          
+
           $product->update($id, $_POST, 'product_id');
 
           redirect('products/select');
@@ -223,7 +192,6 @@ class Products extends Controller
     if(Auth::access('Admin')){
       $this->view('products/edit', [
         'row'=>$row,
-        'crumbs'=>$crumbs,
         'errors' => $errors
       ]);
     }else{
@@ -241,14 +209,9 @@ class Products extends Controller
 
     $row = $product->where('product_id', $id);
 
-    
-    $crumbs[] = ['Home', "/"];
-    $crumbs[] = ['Modify Products', "products/select"];
-    $crumbs[] = ['Delete Products', "products/delete"];
-
     if(Auth::access('Admin')){
       if (count($_POST) > 0) {
-        
+
         $product->delete($id, 'product_id');
         redirect('products/select');
       }
@@ -256,13 +219,12 @@ class Products extends Controller
 
     if(Auth::access('Admin')){
       $this->view('products/delete', [
-        'row'=>$row,
-        'crumbs'=>$crumbs
+        'row'=>$row
       ]);
     }else{
       $this->view('access-denied');
     }
   }
 
-  
+
 }

@@ -1,7 +1,15 @@
 <?php
 
+/*require_once __DIR__ . '/../excel/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;*/
+
 class Reservation extends Controller
 {
+
+
   public function index()
   {
     if (!Auth::logged_in()) {
@@ -16,7 +24,20 @@ class Reservation extends Controller
     $rows_o = $reserve->viewOverdueReserve();
     $rows_d = $reserve->viewDoneReserve();
 
-    if(count($_POST) > 0){
+    $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'confirms';
+
+    if($page_tab == 'confirms' && count($_POST) > 0){
+
+      if(isset($_POST['btnConfirm'])){
+
+        $date = date("Y-m-d H:i:s", strtotime($_POST['confirm_date']));
+        $id = $_POST['btnConfirm'];
+
+        $reserve->confirmRes($id, $date);
+        include(views_path("partials/pop-message-res"));
+        header("refresh:0.25;url=reservation");
+
+      } else
       if(isset($_POST['mergeRes'])){
 
         if (isset($_POST['reserve_id']) && !empty($_POST['reserve_id'])){
@@ -29,7 +50,7 @@ class Reservation extends Controller
       } else
       if(isset($_POST['cancelRes'])){
 
-        if(isset($_POST['cancelRes']) && !empty($_POST['cancelRes'])){
+        if(isset($_POST['reserve_id']) &&!empty($_POST['reserve_id'])){
 
           $ids = $_POST['reserve_id'];
           foreach($ids as $id){
@@ -40,14 +61,13 @@ class Reservation extends Controller
 
         }
 
-      } else
-      if(isset($_POST['btnConfirm'])){
+      }
+    } else
+    if($page_tab == 'confirmeds' && count($_POST) > 0){
+      if(isset($_POST['doneRes'])){
 
-        $date = date("Y-m-d H:i:s", strtotime($_POST['confirm_date']));
-        $id = $_POST['btnConfirm'];
-
-        $reserve->confirmRes($id, $date);
-        include(views_path("partials/pop-message-res"));
+        $ids = $_POST['reserve_id'];
+        $reserve->doneRes($ids);
         header("refresh:0.25;url=reservation");
 
       } else
@@ -57,14 +77,10 @@ class Reservation extends Controller
         $reserve->confirmRemoveRes($ids);
         header("refresh:0.25;url=reservation");
 
-      } else
-      if(isset($_POST['doneRes'])){
+      }
+    } else
+    if($page_tab == 'overdues' && count($_POST) > 0){
 
-        $ids = $_POST['reserve_id'];
-        $reserve->doneRes($ids);
-        header("refresh:0.25;url=reservation");
-
-      }else
       if(isset($_POST['banUser'])){
         //showD($_POST);
         $id = $_POST['banUser'];
@@ -81,13 +97,21 @@ class Reservation extends Controller
         header("refresh:0.25;url=reservation");
 
       }
+    } else
+    if($page_tab == 'dones' && count($_POST) > 0){
+      if (isset($_POST['clearData'])){
+        $reserve->deleteDoneRes();
+        redirect('reservation');
+      }
     }
+
 
     $this->view('reservation', [
       'rows'=>$rows,
       'rows_c'=>$rows_c,
       'rows_o'=>$rows_o,
       'rows_d'=>$rows_d,
+      'page_tab'=>$page_tab
     ]);
   }
 }

@@ -2,161 +2,50 @@
 
 <div class="container-fluid  p-4 shadow-5 mx-auto" style = "max-width: 1250px; background-color: rgb(45, 45, 45);">
 
-  <div class="mt-5 d-flex justify-content-between align-items-center">
-    <h2 class="text-white"><i class="fa">List To Confirm Reservation</i></h2>
-
-  </div>
 
 
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-md  border-bottom border-body rounded-3" data-bs-theme="dark">
+                <div  class="container justify-content-center">
+                    <ul class="navbar-nav text-center ">
+                        <li class="nav-item mx-5">
+                            <a class="nav-link <?=$page_tab=='confirms'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=confirms">List to Confirm</a>
+                        </li>
+                        <li class="nav-item mx-5">
+                            <a class="nav-link <?=$page_tab=='confirmeds'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=confirmeds">List Cofirmed Reservation</a>
+                        </li>
+                        <li class="nav-item mx-5">
+                            <a class="nav-link <?=$page_tab=='overdues'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=overdues">List Overdue</a>
+                        </li>
+                        <li class="nav-item mx-5">
+                            <a class="nav-link <?=$page_tab=='dones'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=dones">Done Transaction</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-    <form action="" method="POST">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
-        <button type="submit" name="mergeRes" type="button" class="btn bg-primary bg-gradient text-white shadow">Merge Item</button>
-        <button type="submit" name="cancelRes" type="button" class="btn bg-danger bg-gradient text-white shadow">Cancel Reservation</button>
-    </div>
-    <?php if($rows != null) { ?>
-      <div class="table-responsive">
-        <table class="table table-dark table-striped align-middle">
-        <tr>
-            <th>Select</th>
-            <th>Full Name</th>
-            <th>Product Name</th>
-            <th>Product Type</th>
-            <th>Product Price</th>
-            <th>Product Quantity</th>
-            <th>Image</th>
-            <th></th>
-        </tr>
-      <?php foreach ($rows as $index => $item) { ?>
+            <?php
+                   switch ($page_tab) {
+                        case 'confirms':
+                                include(views_path('reserve-confirms'));
+                            break;
+                        case 'confirmeds':
+                                include(views_path('reserve-confirmeds'));
+                            break;
+                        case 'overdues':
+                                include(views_path('reserve-overdues'));
+                            break;
+                        case 'dones':
+                                include(views_path('reserve-dones'));
+                            break;
 
-        <?php include(views_path('list-tab/reserve-tab/show-list')); ?>
-
-      <?php } ?>
-        </table>
-      </div>
-    <?php } else { ?>
-
-      <div class="container-fluid rounded-2 bg-dark p-2" style = "background-color: rgba(255, 51, 51, 1);">
-          <h3 class = "text-white text-center">Currently don't have any product pending in reserve!!</h3>
-      </div>
-
-    <?php } ?>
-    </form>
-
+                        default:
+                            # code...
+                            break;
+                    }
+            ?>
+          </div>
   <hr class="text-white">
-
-  <div class="mt-5 d-flex justify-content-between align-items-center">
-    <h2 class="text-white"><i class="fa">List Confirmed Reservation</i></h2>
-  </div>
-
-  <form action="" method="POST">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
-        <button type="submit" name="doneRes" type="button" class="btn bg-success bg-gradient text-white shadow">Reservation Done</button>
-        <button type="submit" name="confRemove" type="button" class="btn bg-danger bg-gradient text-white shadow">Remove Confirmation</button>
-    </div>
-    <?php if($rows_c != null) { ?>
-      <div class="table-responsive">
-        <table class="table table-dark table-striped align-middle">
-        <tr>
-            <th>Select</th>
-            <th>Full Name</th>
-            <th>Product Name</th>
-            <th>Product Type</th>
-            <th>Product Price</th>
-            <th>Product Quantity</th>
-            <th>Due Date</th>
-            <th>Image</th>
-            <th></th>
-        </tr>
-      <?php foreach ($rows_c as $index => $item) { ?>
-
-        <?php include(views_path('list-tab/reserve-tab/show-c-list')); ?>
-
-      <?php } ?>
-        </table>
-      </div>
-    <?php } else { ?>
-
-      <div class="container-fluid rounded-2 bg-dark p-2" style = "background-color: rgba(255, 51, 51, 1);">
-          <h3 class = "text-white text-center">Currently don't have any product confirm in reserve!!</h3>
-      </div>
-
-    <?php } ?>
-    </form>
-
-  <hr class="text-white">
-
-  <div class="mt-5 d-flex justify-content-between align-items-center">
-    <h2 class="text-white"><i class="fa">List Overdue Reservation</i></h2>
-  </div>
-
-  <form action="" method="POST">
-    <?php if($rows_o != null) { ?>
-      <div class="table-responsive">
-        <table class="table table-dark table-striped align-middle">
-        <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Product Reserved</th>
-            <th>Violation Count</th>
-            <th>Profile</th>
-            <th></th>
-        </tr>
-      <?php foreach ($rows_o as $index => $item) { ?>
-
-        <?php include(views_path('list-tab/reserve-tab/show-overdue')); ?>
-
-      <?php } ?>
-        </table>
-      </div>
-    <?php } else { ?>
-
-      <div class="container-fluid rounded-2 bg-dark p-2" style = "background-color: rgba(255, 51, 51, 1);">
-          <h3 class = "text-white text-center">Currently don't have any product overdue in reserve!!</h3>
-      </div>
-
-    <?php } ?>
-  </form>
-
-  <hr class="text-white">
-
-  <div class="mt-5 d-flex justify-content-between align-items-center">
-    <h2 class="text-white"><i class="fa">List Done Transaction</i></h2>
-  </div>
-
-  <form action="" method="POST">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
-        <button type="submit" name="exportExcel" type="button" class="btn bg-success bg-gradient text-white shadow">Export To Excel</button>
-        <button type="submit" name="clearData" type="button" class="btn bg-danger bg-gradient text-white shadow">Clear Data</button>
-    </div>
-    <?php if($rows_d != null) { ?>
-      <div class="table-responsive">
-        <table class="table table-dark table-striped align-middle">
-        <tr>
-            <th>Full Name</th>
-            <th>Product Name</th>
-            <th>Product Type</th>
-            <th>Product Price</th>
-            <th>Product Quantity</th>
-            <th>Image</th>
-            <th></th>
-        </tr>
-      <?php foreach ($rows_d as $index => $item) { ?>
-
-        <?php include(views_path('list-tab/reserve-tab/show-done')); ?>
-
-      <?php } ?>
-        </table>
-      </div>
-    <?php } else { ?>
-
-      <div class="container-fluid rounded-2 bg-dark p-2" style = "background-color: rgba(255, 51, 51, 1);">
-          <h3 class = "text-white text-center">Currently don't have any transaction done in reserve!!</h3>
-      </div>
-
-    <?php } ?>
-  </form>
-
 </div>
 
 <?php include "partials/footer.php" ?>
