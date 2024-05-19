@@ -96,7 +96,7 @@
                                         <div class="modal-footer">
                                             <form action="" method="POST">
                                                 <button type="button" class="btn bg-dark bg-gradient text-white shadow" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" name="clearData" type="button" class="btn bg-danger bg-gradient text-white shadow">Proceed Clear Data</button>
+                                                <button type="submit" name="clearData" class="btn bg-danger bg-gradient text-white shadow">Proceed Clear Data</button>
                                             </form>
                                         </div>
                                     </div>

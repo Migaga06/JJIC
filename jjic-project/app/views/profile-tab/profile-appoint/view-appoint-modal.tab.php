@@ -109,7 +109,7 @@
             <div class="modal-footer">
                 <form action="" method="POST">
                     <button type="button" class="btn bg-dark bg-gradient text-white shadow" data-bs-dismiss="modal">Close</button>
-                    <button name="btnCancel" class="btn bg-danger bg-gradient text-white shadow" value="<?= $item->appoint_id ?>">Proceed Edit</button>
+                    <button name="btnCancel" class="btn bg-danger bg-gradient text-white shadow" value="<?= $item->appoint_id ?>">Proceed Cancel</button>
                 </form>
             </div>
         </div>

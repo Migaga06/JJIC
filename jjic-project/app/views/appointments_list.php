@@ -42,8 +42,6 @@
                             # code...
                             break;
                     }
-                }
-                if(Auth::access('Admin')){
                     switch ($page_tab) {
                          case 'overdues':
                                  include(views_path('appointments-overdues'));

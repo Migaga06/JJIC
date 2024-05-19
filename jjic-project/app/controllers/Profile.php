@@ -31,7 +31,7 @@ class Profile extends Controller
       if(isset($_POST['btnRemove'])){
 
         $cart->delete($_POST['btnRemove'], 'cart_id');
-        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=carts");
+        header("Location: profile/".$_SESSION['USER']->user_id."?tab=carts");
 
       } else
       if(isset($_POST['multiRes'])){
@@ -57,7 +57,7 @@ class Profile extends Controller
             $reserve->insertResFromCarts($ids, $qtys, $sumPrice);
             $cart->deleteCart($ids);
           }
-          header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
+          header("Location: profile/".$_SESSION['USER']->user_id."?tab=reserves");
         }
       }
     } else
@@ -93,6 +93,12 @@ class Profile extends Controller
       if(isset($_POST['btnCancel'])){
         $id = $_POST['btnCancel'];
         $appointment->delete($id, 'appoint_id');
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
+      }else
+      if(isset($_POST['clearAppoint'])){
+        $id = $_POST['clearAppoint'];
+        $deleteQ = "DELETE FROM appointments WHERE appoint_id = '$id'";
+        $appointment->query($deleteQ);
         header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
       }
 

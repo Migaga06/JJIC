@@ -8,7 +8,7 @@
           <a href="<?=ROOT?>/make_pdf_a">
           <button type="button" class="btn bg-success bg-gradient text-white shadow">Export PDF</button>
         </a>
-          <button data-bs-toggle="modal" data-bs-target="#clear" type="button" class="btn bg-danger bg-gradient text-white shadow">Clear Data</button>
+          <button name="clearData" type="submit" class="btn bg-danger bg-gradient text-white shadow">Clear Data</button>
         <?php }?>
     </div>
     <?php if($rows_d != null) { ?>

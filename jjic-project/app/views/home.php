@@ -36,7 +36,7 @@
         </div>
         <div class="col-lg-12 mb-1">
           <label for="tdesc" class="form-label">Description</label>
-          <input type="hidden" class="form-control" name="user_id" value="1">
+          <input type="hidden" class="form-control" name="user_id" value="<?= $_SESSION['USER']->user_id?>">
           <textarea name="post_description" class="form-control" placeholder="What's on your mind?" style="background-color: rgb(75, 75, 75);"></textarea>
         </div>
         <div class="col-lg-12 mt-1">
@@ -56,15 +56,36 @@
 
     <?php }?>
   </form>
-  <div class="row justify-content-center mt-3">
-      <div class="col-3"></div>
-      <div class="col-6">
-        <?php if($rows != null){?>
-          <?php include(views_path('home-post/post-format/format'));?>
-        <?php }?>
+  <?php if($rows_p != null){?>
+  <div class="row justify-content-center mt-3 mb-5">
+      <div class="col-2"></div>
+      <div class="col-8">
+
+          <?php include(views_path('home-post/post-format/pinned'));?>
+
       </div>
-      <div class="col-3"></div>
+      <div class="col-2"></div>
   </div>
+
+  <hr class="text-white">
+  <?php }?>
+  <?php if($rows != null){ ?>
+
+
+      <h1 class="text-white my-2 mb-5 mt-5  text-center" ><i class="fa fa-hand"></i> Hello <?= $_SESSION['USER']->firstname ?> here what's new today</h1>
+
+
+  <div class="row justify-content-center mt-3">
+      <div class="col-2"></div>
+      <div class="col-8">
+
+          <?php include(views_path('home-post/post-format/format'));?>
+
+      </div>
+      <div class="col-2"></div>
+  </div>
+  <?php }?>
 </div>
+
 
 <?php include "partials/footer.php" ?>

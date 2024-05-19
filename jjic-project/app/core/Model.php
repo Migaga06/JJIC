@@ -866,53 +866,58 @@ class Model extends Database
   public function deleteDoneAppoint(){
     $query = "DELETE FROM $this->table WHERE appoint_status = 'Done'";
     $this->query($query);
+    return false;
   }
 
   public function loadPost(){
 
-          $postQuery = "SELECT p.*, u.firstname, u.lastname
-                        FROM $this->table p
-                        JOIN users u ON p.user_id = u.user_id
-                        ORDER BY p.created_at DESC";
-          $result = $this->query($postQuery);
+    $postQuery = "SELECT p.*, u.firstname, u.lastname, u.user_image, COUNT(l.like_id) AS like_count
+                  FROM $this->table p
+                  JOIN users u ON p.user_id = u.user_id
+                  LEFT JOIN likes l ON p.post_id = l.post_id
+                  GROUP BY p.post_id
+                  ORDER BY p.created_at DESC";
+    $result = $this->query($postQuery);
 
-          if ($result) {
-              $data = $result;
+    if ($result) {
+      $data = $result;
 
-              if(is_array($data)){
-                if (property_exists($this, 'afterSelect')) {
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
 
-                  foreach($this->afterSelect as $func){
-                    $data = $this->$func($data);
-                  }
-                }
-              }
-              return $data;
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
           }
-          return false;
-          $postData = [];
+        }
+      }
+      return $data;
+    }
+    return false;
 
-          /*foreach ($posts as $post) {
-            $postData[] = [
-            'title' => htmlspecialchars($post['title']),
-            'author' => htmlspecialchars($post['firstname']) . " " . htmlspecialchars($post['lastname']),
-            'description' => nl2br(htmlspecialchars($post['description'])),
-            'created_at' => htmlspecialchars($post['created_at']),
-            'files' => []
-            ];
+  }
 
-            $fileQuery = "SELECT file_path, type FROM post_images WHERE post_id = :post_id";
-            $fileStmt = $pdo->prepare($fileQuery);
-            $fileStmt->execute(['post_id' => $post['id']]);
-            $files = $fileStmt->fetchAll(PDO::FETCH_ASSOC);
+  public function loadPinnedPost(){
+    $pinnedPostQuery = "SELECT p.*, u.firstname, u.lastname, u.user_image, COUNT(l.like_id) AS like_count
+        FROM $this->table p
+        JOIN users u ON p.user_id = u.user_id
+        LEFT JOIN likes l ON p.post_id = l.post_id
+        WHERE p.is_pinned = 'Pinned'
+        GROUP BY p.post_id
+        ORDER BY p.created_at DESC";
+    $result = $this->query($pinnedPostQuery);
 
-            foreach ($files as $file) {
-              if ($file['type'] == 'image') {
-                  $postData[count($postData) - 1]['files'][] = "<img src='" . htmlspecialchars($file['file_path']) . "' alt='Post image' class='img-fluid mb-2'>";
-              } elseif ($file['type'] == 'video') {
-                  $postData[count($postData) - 1]['files'][] = "<video controls class='img-fluid mb-2'><source src='" . htmlspecialchars($file['file_path']) . "' type='video/mp4'>Your browser does not support the video tag.</video>";
-              }
-            }
-          }*/
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+      return $data;
+    }
+    return false;
   }
 }

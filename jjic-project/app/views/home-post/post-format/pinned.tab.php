@@ -1,11 +1,9 @@
-
-
 <?php
 date_default_timezone_set('Asia/Manila');
 
 $image = new Post_image();
 $likes = new Like();
-    foreach ($rows as $post) {
+    foreach ($rows_p as $post) {
 
     $fileQuery = "SELECT file_path, type FROM post_images WHERE post_id = :post_id";
     $files = $image->query($fileQuery, ['post_id' => $post->post_id]);
@@ -29,14 +27,13 @@ $likes = new Like();
         $formattedTime = 'Just now';
     }
     ?>
-    <?php if(Auth::access('Staff')){ ?>
-
-
+<h2 class="text-white"><i class="fa fa-thumbtack"></i> Pinned Post</h2>
+<?php if(Auth::access('Staff')){ ?>
 <form method="POST">
 <div class="col-12" style="max-width: 700px">
-    <button name="deletePost" type="submit" class="badge btn" style="color: rgb(155,155,155);" value="<?= $post->post_id?>"> <i class="fa fa-trash-can" ></i> Delete</button>
-    <button name="pinPost" type="submit" class="badge btn float-end" style="color: rgb(155,155,155);" value="<?= $post->post_id?>">
-        <i class="fa fa-thumbtack"></i> Pin Post
+    <button name="deletePinPost" type="submit" class="badge btn" style="color: rgb(155,155,155);" value="<?= $post->post_id?>"> <i class="fa fa-trash-can"></i> Delete</button>
+    <button name="unpinPost" type="submit" class="badge btn float-end" style="color: rgb(155,155,155);" value="<?= $post->post_id?>">
+        <i class="fa fa-thumbtack"></i> Unpinned Post
     </button>
 </div>
 </form>
