@@ -8,16 +8,18 @@
                 </form>
                 <a href="<?=ROOT?>/products/index" class="btn btn-sm btn-dark mt-1"><i class="fa fa-cart-plus"></i> View All Product</a>
             </nav>
-            
+
             <form action="" method="POST">
             <h1 class="text-white text-center mt-3 mb-2"><i class="fa">View Cart</i></h1>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
-                <button type="submit" name="multiRes" type="button" class="btn bg-primary bg-gradient text-white shadow">Reserve Item</button>
-            </div>
+            <?php if($row_cart){?>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
+                    <button type="submit" name="multiRes" type="button" class="btn bg-primary bg-gradient text-white shadow">Reserve Item</button>
+                </div>
+            <?php }?>
             <div>
-            
+
                 <?php if(isset($row_cart) && $row_cart) { ?>
-                     
+
                     <table class="table table-dark table-striped align-middle">
                     <tr>
                         <th>Select</th>
@@ -33,7 +35,7 @@
                                 <?php include(views_path('profile-tab/profile-cart-modal/cart-tab-item')); ?>
                         <?php } ?>
                     </table>
-                    
+
                 <?php } else { ?>
                         <?php if(count($_POST)>0): ?>
                             <div class="container-fluid rounded-2 bg-danger p-2 mb-2" style = "background-color: rgba(255, 51, 51, 1);">
@@ -46,5 +48,5 @@
                 <?php } ?>
             </div>
             </form>
-            
-            
+
+

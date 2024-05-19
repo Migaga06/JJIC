@@ -25,6 +25,11 @@
                     <tr>
                         <th>Email:</th><td><?= $_SESSION['USER']->email ?></td>
                     </tr>
+                    <?php if($_SESSION['USER']->role === 'Staff' || $_SESSION['USER']->role === 'Admin' || $_SESSION['USER']->role === 'Super Admin') {?>
+                    <tr>
+                        <th>Email:</th><td><?= $_SESSION['USER']->role ?></td>
+                    </tr>
+                    <?php }?>
                 </table>
             </div>
         </div>

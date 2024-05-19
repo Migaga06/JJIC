@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="row p-2 bg-black bg-gradient mx-3 rounded border border-light" style="height: 100px;">
-                                <div class="col-4">
+                                    <div class="col-4">
                                         <img src="<?=ROOT?>/<?= $item->user_image ?>" alt="" class="d-block mx-auto rounded border border-dark" style="width: 85px; height: 85px;">
                                     </div>
                                     <div class=" col-8 text-center">

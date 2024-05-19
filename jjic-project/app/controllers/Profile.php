@@ -14,6 +14,7 @@ class Profile extends Controller
 
     $row_cart = $cart->where('user_id', $_SESSION['USER']->user_id);
     $row_reserve = $reserve->where('user_id', $_SESSION['USER']->user_id);
+    $row_appoint = $appointment->where('user_id', $_SESSION['USER']->user_id);
 
     $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'carts';
 
@@ -30,7 +31,7 @@ class Profile extends Controller
       if(isset($_POST['btnRemove'])){
 
         $cart->delete($_POST['btnRemove'], 'cart_id');
-        redirect('profile/'.$_SESSION['USER']->user_id."?tab=carts");
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=carts");
 
       } else
       if(isset($_POST['multiRes'])){
@@ -56,7 +57,7 @@ class Profile extends Controller
             $reserve->insertResFromCarts($ids, $qtys, $sumPrice);
             $cart->deleteCart($ids);
           }
-          redirect('profile/' . $_SESSION['USER']->user_id . "?tab=reserves");
+          header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
         }
       }
     } else
@@ -75,18 +76,32 @@ class Profile extends Controller
       if(isset($_POST['cancelRes'])){
 
         $reserve->cancelRes($_POST['cancelRes']);
-
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
       } else
       if(isset($_POST['clearReserve'])){
 
         $reserve->clearReserveId($_POST['clearReserve']);
-        header("refresh:0.25;url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=reserves");
       }
+    } else
+    if ($page_tab == 'appointments' && count($_POST) > 0){
+
+      if(isset($_POST['btnEdit'])){
+        $appointment->editAppoint($_POST);
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
+      } else
+      if(isset($_POST['btnCancel'])){
+        $id = $_POST['btnCancel'];
+        $appointment->delete($id, 'appoint_id');
+        header("Location: url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
+      }
+
     }
 
     $this->view('profile', [
       'row_cart'=>$row_cart,
       'row_reserve'=>$row_reserve,
+      'row_appoint'=>$row_appoint,
       'page_tab'=>$page_tab
     ]);
   }

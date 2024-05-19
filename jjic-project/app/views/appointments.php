@@ -1,7 +1,27 @@
 <?php include "partials/header.php" ?>
 
 <div class="container-fluid  p-4 shadow-5 mx-auto" style = "max-width: 1000px; background-color: rgb(45, 45, 45);">
-
+<?php if($showQuantityExceededMessage){ ?>
+            <div class="modal" tabindex="-1" role="dialog" style="display: block;">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Existing Appointment!!</h5>
+                  </div>
+                  <div class="modal-body">
+                    You already have appointment please check your appointments in your profile. You can edit it anytime you want.
+                  </div>
+                  <div class="modal-footer">
+                    <a href="<?= ROOT ?>/profile/<?=$_SESSION['USER']->user_id?>?tab=appointments" class= "btn btn-danger ">
+                      <button type="button" class="btn text-white" data-bs-dismiss="modal">
+                        Close
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+    <?php }?>
   <div class="my-4 row mx-2 p-3 shadow-lg rounded-4 border-top border-bottom border-secondary text-white">
     <h1 class="text-white"><i class="fa">Appointment Form</i></h1>
 
@@ -37,14 +57,14 @@
         <select name="appoint_reason" class="form-select">
           <option value="Motorcycle Check-up">Motorcycle Check-up</option>
           <option value="Motorcycle Fixing">Motorcycle Fixing</option>
-          <option value="Motorcycle Fixing">Motorcycle Change Oil</option>
+          <option value="Motorcycle Chane Oil">Motorcycle Change Oil</option>
         </select>
       </div>
       <div class="col-md-6">
         <label for="inputPassword4" class="form-label">Appointment Date</label>
         <input type="datetime-local" id="date-limit" name="appoint_date" class="form-control">
         <div id="passwordHelpBlock" class="form-text">
-          Must 3 days ahead in the current day also 8am - 8pm only allowed
+          Must atleast 3 days ahead in the current day, and also 8am - 8pm only allowed
         </div>
       </div>
       <div class="col-6">

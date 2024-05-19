@@ -55,9 +55,4 @@ class Appointment extends Model
         $data['appoint_id'] = random_string(60);
         return $data;
     }
-
-    public function insertAppoint($data){
-        $appoint = new Appointment();
-        $appoint->insert($data);
-    }
 }

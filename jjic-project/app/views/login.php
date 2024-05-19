@@ -1,5 +1,11 @@
-<?php include "partials/header.php" ?>
 
+<?php if(!empty($_SESSION['USER'])){
+  redirect('home');
+
+  }
+  else{
+    ?>
+<?php include "partials/header.php" ?>
 <div class="container-fluid  p-4 shadow-5 mx-auto" style = "max-width: 1000px; background-color: rgb(45, 45, 45);">
   <div class="row align-items-start">
     <div class="col-xl-2">
@@ -26,6 +32,8 @@
 
         <?php endif; ?>
 
+
+
         <div class="mb-2">
           <label for="" class="text-white">Username</label>
           <input type="text" name="username" value="<?= get_var('username') ?>" class="form-control" placeholder ="Username">
@@ -46,5 +54,7 @@
     </div>
   </div>
 </div>
-
 <?php include "partials/footer.php" ?>
+<?php
+  }
+    ?>

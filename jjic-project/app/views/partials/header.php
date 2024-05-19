@@ -37,7 +37,7 @@
                 <li class="nav-item">
                   <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products"><i class="fa fa-expand"></i> View Product</a></small>
                 </li>
-                <?php if(Auth::access('Admin')):?>
+                <?php if(Auth::access('Staff')):?>
                 <li class="nav-item">
                   <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products/select/"><i class="fa fa-screwdriver-wrench"></i> Modify Product</a></small>
                 </li>
@@ -47,12 +47,12 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="<?= ROOT ?>/appointments"><i class="fa fa-calendar-check"></i> Appointment</a>
             </li>
-            <?php if(Auth::access('Admin')):?>
+            <?php if(Auth::access('Staff')):?>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-rectangle-list"></i> Lists</a>
               <ul class="dropdown-menu" arial-labelledby="navbarDropdownMenuLink">
                 <li class="nav-item">
-                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/products"><i class="fa fa-calendar-check"></i> List Appointment</a></small>
+                  <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/appointments_list"><i class="fa fa-calendar-check"></i> List Appointment</a></small>
                 </li>
                 <li class="nav-item">
                   <small><a class="nav-link active p-2 mx-2" aria-current="page" href="<?= ROOT ?>/reservation"><i class="fa fa-box-open"></i> List Reservation</a></small>
@@ -89,4 +89,4 @@
     </div>
   </nav>
 </header>
-<body style ="height: 100%; background-image: url(<?=ROOT?>/assets/images/yakuback.png); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body style ="background-image: url(<?=ROOT?>/assets/images/yakuback.png); position:absolute; top:0; bottom:0; right:0; left:0; heigth: 100%;">

@@ -8,20 +8,20 @@
             <nav class="navbar navbar-expand-md  border-bottom border-body rounded-3" data-bs-theme="dark">
                 <div  class="container justify-content-center">
                     <ul class="navbar-nav text-center ">
-                    <?php if(Auth::access('Staff')){?>
+                        <?php if(Auth::access('Staff')){?>
                         <li class="nav-item mx-5">
-                            <a class="nav-link <?=$page_tab=='confirms'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=confirms">List to Confirm</a>
+                            <a class="nav-link <?=$page_tab=='confirms'?'active':''; ?>" href="<?=ROOT?>/appointments_list?tab=confirms">List to Confirm</a>
                         </li>
                         <li class="nav-item mx-5">
-                            <a class="nav-link <?=$page_tab=='confirmeds'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=confirmeds">List Cofirmed Reservation</a>
+                            <a class="nav-link <?=$page_tab=='confirmeds'?'active':''; ?>" href="<?=ROOT?>/appointments_list?tab=confirmeds">List Cofirmed Appointments</a>
                         </li>
                         <?php }?>
                         <?php if(Auth::access('Admin')){?>
                         <li class="nav-item mx-5">
-                            <a class="nav-link <?=$page_tab=='overdues'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=overdues">List Overdue</a>
+                            <a class="nav-link <?=$page_tab=='overdues'?'active':''; ?>" href="<?=ROOT?>/appointments_list?tab=overdues">List Overdue</a>
                         </li>
                         <li class="nav-item mx-5">
-                            <a class="nav-link <?=$page_tab=='dones'?'active':''; ?>" href="<?=ROOT?>/reservation?tab=dones">Done Transaction</a>
+                            <a class="nav-link <?=$page_tab=='dones'?'active':''; ?>" href="<?=ROOT?>/appointments_list?tab=dones">Done Appointments</a>
                         </li>
                         <?php }?>
                     </ul>
@@ -29,13 +29,13 @@
             </nav>
 
             <?php
-             if(Auth::access('Staff')){
+            if(Auth::access('Staff')){
                    switch ($page_tab) {
                         case 'confirms':
-                                include(views_path('reserve-confirms'));
+                                include(views_path('appointments-confirms'));
                             break;
                         case 'confirmeds':
-                                include(views_path('reserve-confirmeds'));
+                                include(views_path('appointments-confirmeds'));
                             break;
 
                         default:
@@ -46,10 +46,10 @@
                 if(Auth::access('Admin')){
                     switch ($page_tab) {
                          case 'overdues':
-                                 include(views_path('reserve-overdues'));
+                                 include(views_path('appointments-overdues'));
                              break;
                          case 'dones':
-                                 include(views_path('reserve-dones'));
+                                 include(views_path('appointments-dones'));
                              break;
 
                          default:

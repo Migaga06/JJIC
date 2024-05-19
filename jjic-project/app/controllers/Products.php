@@ -10,6 +10,12 @@ class Products extends Controller
     $product = new Product();
     $row = $product->findAllEqual();
 
+    if(isset($_POST['search'])){
+
+      $product_name = "%".trim($_POST['product_name'])."%";
+      $query = "SELECT * FROM products WHERE product_name LIKE '$product_name' AND product_qty != 0";
+      $row = $product->query($query);
+    }
 
     $this->view('products/index', [
       'gets'=>$row
@@ -77,14 +83,29 @@ class Products extends Controller
     }
 
     $product = new Product();
-    $row = $product->findAll();
+    $query = "SELECT u.firstname, u.lastname, p.* FROM products p
+        JOIN users u
+        WHERE p.make_user_id = u.user_id";
+    $row = $product->query($query);
 
-    if(Auth::access('Admin')){
+    if(Auth::access('Staff')){
+
+      if(isset($_POST['search'])){
+
+        $product_name = "%".trim($_POST['product_name'])."%";
+        $query = "SELECT u.firstname, u.lastname, p.* FROM products p
+        JOIN users u
+        WHERE p.product_name LIKE :product_name AND p.make_user_id = u.user_id";
+        $row = $product->query($query, [
+          'product_name'=>$product_name
+        ]);
+      }
+
       $this->view('products/select', [
         'gets'=>$row
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -142,7 +163,7 @@ class Products extends Controller
         'errors' => $errors
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -156,7 +177,7 @@ class Products extends Controller
 
     $row = $product->where('product_id', $id);
 
-    if(Auth::access('Admin')){
+    if(Auth::access('Staff')){
       if (count($_POST) > 0) {
         if ($product->validate_product($_POST)) {
           if (count($_FILES) > 0) {
@@ -189,13 +210,13 @@ class Products extends Controller
       }
     }
 
-    if(Auth::access('Admin')){
+    if(Auth::access('Staff')){
       $this->view('products/edit', [
         'row'=>$row,
         'errors' => $errors
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -222,7 +243,7 @@ class Products extends Controller
         'row'=>$row
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 

@@ -3,11 +3,11 @@
   </div>
 
   <form action="" method="POST">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
+    <?php if($rows_c != null) { ?>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
         <button type="submit" name="doneRes" type="button" class="btn bg-success bg-gradient text-white shadow">Reservation Done</button>
         <button type="submit" name="confRemove" type="button" class="btn bg-danger bg-gradient text-white shadow">Remove Confirmation</button>
-    </div>
-    <?php if($rows_c != null) { ?>
+      </div>
       <div class="table-responsive">
         <table class="table table-dark table-striped align-middle">
         <tr>

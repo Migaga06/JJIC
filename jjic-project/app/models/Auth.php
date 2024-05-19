@@ -1,30 +1,12 @@
 <?php
 
-class Auth
+class Auth extends Model
 {
   public static function authenticate($row)
   {
-    // Check if the user is banned
-    if (self::isUserBanned($row->id)) {
-
-    }
     // User is not banned, proceed with authentication
     $_SESSION['USER'] = $row;
     return true;
-  }
-
-  private static function isUserBanned($userId)
-  {
-    $user = new User();
-    $userBannedTime = $user->getBannedTime($userId);
-
-    if ($userBannedTime !== null && strtotime($userBannedTime) > time()) {
-        echo "User is banned until: $userBannedTime";
-        die;
-    } else {
-        echo "User is not banned or banned time has expired";
-        return false;
-    }
   }
 
   public static function logout()
@@ -61,8 +43,9 @@ class Auth
 
     $logged_in_rank = $_SESSION['USER']->role;
 
-    $ROLE['Super Admin'] = ['Super Admin', 'Admin', 'User'];
-    $ROLE['Admin'] = ['Admin', 'User'];
+    $ROLE['Super Admin'] = ['Super Admin', 'Admin', 'Staff', 'User'];
+    $ROLE['Admin'] = ['Admin', 'Staff', 'User'];
+    $ROLE['Staff'] = ['Staff', 'User'];
     $ROLE['User'] = ['User'];
 
     if(!isset($ROLE[$logged_in_rank])){

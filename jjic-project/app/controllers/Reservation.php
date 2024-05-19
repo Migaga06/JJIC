@@ -23,7 +23,7 @@ class Reservation extends Controller
     $rows_c = $reserve->viewConfirmReserve();
     $rows_o = $reserve->viewOverdueReserve();
     $rows_d = $reserve->viewDoneReserve();
-
+    if(Auth::access('Staff')){
     $page_tab = isset($_GET['tab']) ? $_GET['tab'] : 'confirms';
 
     if($page_tab == 'confirms' && count($_POST) > 0){
@@ -78,7 +78,19 @@ class Reservation extends Controller
         header("refresh:0.25;url=reservation");
 
       }
+    }
+
+
+    $this->view('reservation', [
+      'rows'=>$rows,
+      'rows_c'=>$rows_c,
+      'rows_o'=>$rows_o,
+      'rows_d'=>$rows_d,
+      'page_tab'=>$page_tab
+    ]);
     } else
+    if(Auth::access('Admin')){
+
     if($page_tab == 'overdues' && count($_POST) > 0){
 
       if(isset($_POST['banUser'])){
@@ -104,14 +116,8 @@ class Reservation extends Controller
         redirect('reservation');
       }
     }
-
-
-    $this->view('reservation', [
-      'rows'=>$rows,
-      'rows_c'=>$rows_c,
-      'rows_o'=>$rows_o,
-      'rows_d'=>$rows_d,
-      'page_tab'=>$page_tab
-    ]);
+    }else {
+      $this->view('access');
+    }
   }
 }

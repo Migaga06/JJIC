@@ -490,7 +490,7 @@ class Model extends Database
   public function viewOverdueReserve(){
     $query= "SELECT u.firstname, u.lastname, u.violation_count, u.email, u.user_image, r.*
              FROM $this->table r JOIN users u
-             ON r.user_id = u.user_id AND r.reserve_status = 'Overdue' AND u.user_status = 'Not Banned'";
+             ON r.user_id = u.user_id AND r.reserve_status = 'Overdue' AND (u.user_status = 'Not Banned' OR u.user_status = 'Banned')";
 
     $result = $this->query($query);
 
@@ -657,5 +657,262 @@ class Model extends Database
   public function clearReserveId($id){
     $delQuery = "DELETE FROM $this->table WHERE reserve_id = '$id'";
     $this->query($delQuery);
+  }
+
+  public function insertAppointment($data){
+    //remove unwanted to edit
+    if (property_exists($this, 'allowedColumns')) {
+      foreach($data as $key => $column){
+        if(!in_array($key, $this->allowedColumns)){
+          unset($data[$key]);
+        }
+      }
+    }
+    if (property_exists($this, 'beforeInsert')) {
+
+      foreach($this->beforeInsert as $func){
+        $data = $this->$func($data);
+      }
+    }
+    $columns = implode(', ', array_keys($data));
+    $values = implode(', :', array_keys($data));
+    $query = "insert into $this->table ($columns) values (:$values)";
+    $this->query($query, $data);
+
+  }
+
+  public function checkerAppointment($user_id){
+    $checkQuery = "SELECT * FROM $this->table WHERE user_id = '$user_id'";
+    $res = $this->query($checkQuery);
+    if($res){
+
+      $data = $res;
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+        foreach($this->afterSelect as $func){
+          $data = $this->$func($data);
+          }
+        }
+      }
+      return $data;
+
+    }
+    return false;
+  }
+
+  public function editAppoint($data){
+    $id = $data['btnEdit'];
+
+    $query = "UPDATE $this->table
+              SET
+              firstname = '".$data['firstname']."',
+              lastname = '".$data['lastname']."',
+              appoint_reason = '".$data['appoint_reason']."',
+              appoint_date = '".$data['appoint_date']."',
+              contact = '".$data['contact']."',
+              email = '".$data['email']."',
+              appoint_additional = '".$data['appoint_additional']."'
+              WHERE appoint_id = '$id'";
+
+    $this->query($query);
+    return false;
+  }
+
+  public function viewAppoint(){
+    $query= "SELECT * FROM $this->table WHERE appoint_status = 'Not Confirm'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function viewConfirmAppoint(){
+    $query = "SELECT *
+    FROM $this->table
+    WHERE appoint_status = 'Confirm'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+    $data = $result;
+
+    // Get the current date and time
+    $now = new DateTime();
+
+    // Loop through each result to check the confirm_due date
+    foreach ($data as $appointments) {
+      // Assuming appoint_date is a datetime string, convert it to DateTime object
+      $appoint_date = new DateTime($appointments->appoint_date);
+
+      if ($appoint_date < $now) {
+          // Perform the action for overdue reservations
+          $appointments->appoint_status = 'Overdue';
+
+          // Update the reserve_status and increment violation_count in the database
+          $updateQuery = "UPDATE $this->table a
+                          JOIN users u ON a.user_id = u.user_id
+                          SET
+                              a.appoint_status = 'Overdue',
+                              u.violation_count = u.violation_count + 1
+                          WHERE
+                              a.appoint_id = :appoint_id";
+
+          $this->query($updateQuery, ['appoint_id' => $appointments->appoint_id]);
+      }
+    }
+
+    // Apply any afterSelect processing if necessary
+    if (is_array($data) && property_exists($this, 'afterSelect')) {
+      foreach ($this->afterSelect as $func) {
+          $data = $this->$func($data);
+      }
+    }
+
+    return $data;
+    }
+    return false;
+  }
+
+
+
+  public function viewOverdueAppoint(){
+    $query= "SELECT u.firstname, u.lastname, u.violation_count, u.email, u.user_image, a.*
+             FROM $this->table a JOIN users u
+             ON a.user_id = u.user_id AND a.appoint_status = 'Overdue' AND (u.user_status = 'Not Banned' OR u.user_status = 'Banned')";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function viewDoneAppoint(){
+    $query= "SELECT u.firstname, u.lastname, u.email, u.user_image, a.*
+             FROM $this->table a JOIN users u
+             ON a.user_id = u.user_id AND a.appoint_status = 'Done'";
+
+    $result = $this->query($query);
+
+    if ($result) {
+      $data = $result;
+
+      if(is_array($data)){
+        if (property_exists($this, 'afterSelect')) {
+
+          foreach($this->afterSelect as $func){
+            $data = $this->$func($data);
+          }
+        }
+      }
+
+      return $data;
+    }
+    return false;
+  }
+
+  public function confirmAppoint($id){
+    $query = "UPDATE $this->table SET appoint_status = 'Confirm' WHERE appoint_id = '$id'";
+    $this->query($query);
+  }
+
+  public function cancelAppoint($res_ids){
+    $query = "DELETE FROM $this->table WHERE appoint_id = '$res_ids'";
+    $this->query($query);
+  }
+
+  public function confirmRemoveAppoint($id){
+    $query = "UPDATE $this->table SET appoint_status = 'Not Confirm' WHERE appoint_id = '$id'";
+    $this->query($query);
+  }
+
+  public function doneAppoint($id){
+    $query = "UPDATE $this->table SET appoint_status = 'Done' WHERE appoint_id = '$id'";
+    $this->query($query);
+  }
+
+  public function removeOverdueAppoint($id){
+    $query = "DELETE FROM $this->table WHERE appoint_id = '$id'";
+    $this->query($query);
+  }
+
+  public function deleteDoneAppoint(){
+    $query = "DELETE FROM $this->table WHERE appoint_status = 'Done'";
+    $this->query($query);
+  }
+
+  public function loadPost(){
+
+          $postQuery = "SELECT p.*, u.firstname, u.lastname
+                        FROM $this->table p
+                        JOIN users u ON p.user_id = u.user_id
+                        ORDER BY p.created_at DESC";
+          $result = $this->query($postQuery);
+
+          if ($result) {
+              $data = $result;
+
+              if(is_array($data)){
+                if (property_exists($this, 'afterSelect')) {
+
+                  foreach($this->afterSelect as $func){
+                    $data = $this->$func($data);
+                  }
+                }
+              }
+              return $data;
+          }
+          return false;
+          $postData = [];
+
+          /*foreach ($posts as $post) {
+            $postData[] = [
+            'title' => htmlspecialchars($post['title']),
+            'author' => htmlspecialchars($post['firstname']) . " " . htmlspecialchars($post['lastname']),
+            'description' => nl2br(htmlspecialchars($post['description'])),
+            'created_at' => htmlspecialchars($post['created_at']),
+            'files' => []
+            ];
+
+            $fileQuery = "SELECT file_path, type FROM post_images WHERE post_id = :post_id";
+            $fileStmt = $pdo->prepare($fileQuery);
+            $fileStmt->execute(['post_id' => $post['id']]);
+            $files = $fileStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($files as $file) {
+              if ($file['type'] == 'image') {
+                  $postData[count($postData) - 1]['files'][] = "<img src='" . htmlspecialchars($file['file_path']) . "' alt='Post image' class='img-fluid mb-2'>";
+              } elseif ($file['type'] == 'video') {
+                  $postData[count($postData) - 1]['files'][] = "<video controls class='img-fluid mb-2'><source src='" . htmlspecialchars($file['file_path']) . "' type='video/mp4'>Your browser does not support the video tag.</video>";
+              }
+            }
+          }*/
   }
 }

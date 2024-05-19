@@ -15,9 +15,9 @@
                 <button data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $index ?>" type="button" class="btn bg-danger bg-gradient text-white shadow">Cancel</button>
             <?php }?>
             <?php if($item->reserve_status === "Confirm"){?>
-                <button disabled data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $index ?>" type="button" class="btn bg-secondary bg-gradient text-white shadow">Cancel</button>
+                <button disabled data-bs-toggle="modal" data-bs-target="#staticBackdrop<?= $index ?>" type="button" class="btn bg-secondary bg-gradient text-white shadow">Request Cancel</button>
             <?php }?>
-            <?php if($item->reserve_status === "Done"){?>
+            <?php if(($item->reserve_status === "Done") || ($item->reserve_status === "Overdue")){?>
               <form action="" method="POST">
                 <button type="submit" name="clearReserve" type="button" class="btn bg-success bg-gradient text-white shadow" value="<?= $item->reserve_id ?>">Clear</button>
               </form>

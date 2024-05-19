@@ -10,18 +10,28 @@ class Appointments extends Controller
 
     $errors = [];
     $appoint = new Appointment();
+    $showQuantityExceededMessage = false;
+
 
     if(count($_POST) > 0){
       if($appoint->validate($_POST)){
-        $appoint->insertAppoint($_POST);
-        header("refresh:0.25;url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
+        $checker = $appoint->checkerAppointment($_POST['user_id']);
+        if($checker){
+          $showQuantityExceededMessage = true;
+
+        } else
+        if(!$checker){
+          $appoint->insertAppointment($_POST);
+          header("refresh:0;url=profile/".$_SESSION['USER']->user_id."?tab=appointments");
+        }
       } else {
         $errors = $appoint->errors;
       }
     }
 
     $this->view('appointments',[
-      'errors'=>$errors
+      'errors'=>$errors,
+      'showQuantityExceededMessage'=>$showQuantityExceededMessage
     ]);
   }
 }

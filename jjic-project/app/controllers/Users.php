@@ -13,8 +13,18 @@ class Users extends Controller
     $banned_users = $x->viewBannedUser();
 
 
-
     if(Auth::access('Super Admin')){
+      if(isset($_POST['search'])){
+        $user_name = "%".trim($_POST['user_name'])."%";
+        $query = "SELECT * FROM users WHERE user_status = 'Not Banned' AND (firstname LIKE '$user_name' OR lastname LIKE '$user_name')";
+        $rows = $x->query($query);
+      }
+
+      if(isset($_POST['bansearch'])){
+        $user_banned = "%".trim($_POST['user_banned'])."%";
+        $query = "SELECT * FROM users WHERE user_status = 'Banned' AND (firstname LIKE '$user_banned' OR lastname LIKE '$user_banned')";
+        $banned_users = $x->query($query);
+      }
 
       if(isset($_POST['unbannedUser'])){
         $x->unbannedUser($_POST['unbannedUser']);
@@ -26,7 +36,7 @@ class Users extends Controller
         'users'=>$rows
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -78,7 +88,7 @@ class Users extends Controller
         'errors' => $errors
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -128,7 +138,7 @@ class Users extends Controller
         'row'=> $row
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
   }
 
@@ -156,7 +166,7 @@ class Users extends Controller
         'row' => $row
       ]);
     }else{
-      $this->view('access-denied');
+      $this->view('access');
     }
 
   }
